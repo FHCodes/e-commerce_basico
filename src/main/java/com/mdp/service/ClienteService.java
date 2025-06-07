@@ -24,12 +24,12 @@ public class ClienteService {
 
     @Transactional
     public void cadastraCliente(ClienteRequestDTO clienteRequestDTO){
-        try {
+//        try {
             Cliente cliente = new Cliente(clienteRequestDTO);
             clienteRepository.save(cliente);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Erro no cadastro do cliente");
-        }
+//        } catch (Exception e) {
+//            throw new IllegalArgumentException("Erro no cadastro do cliente");
+//        }
     }
 
     @Transactional
