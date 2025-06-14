@@ -26,7 +26,6 @@ public class EnderecoService {
         if (enderecoRequestDTO.endAtual()) {
             enderecoRepository.desativarEnderecosDoCliente(enderecoRequestDTO.clienteId());
         }
-
     }
 
     @Transactional(readOnly = true)
