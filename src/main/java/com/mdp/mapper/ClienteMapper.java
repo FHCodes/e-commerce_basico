@@ -2,10 +2,8 @@ package com.mdp.mapper;
 
 import com.mdp.dto.response.ClienteResponseDTO;
 import com.mdp.entity.Cliente;
-
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class ClienteMapper {
 

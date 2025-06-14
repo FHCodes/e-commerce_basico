@@ -64,6 +64,8 @@ public class Cliente {
         return cpf;
     }
 
+
+
     public List<Endereco> getEndereco() {
         return endereco;
     }

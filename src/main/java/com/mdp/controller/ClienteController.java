@@ -26,7 +26,7 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> clienteById(@PathVariable Long id) {
-        return ResponseEntity.ok(clienteService.clienteById(id));
+        return ResponseEntity.ok(clienteService.clienteDTOById(id));
     }
 
 
@@ -38,7 +38,7 @@ public class ClienteController {
     }
 
     @PutMapping("/atualiza")
-    public ResponseEntity<ClienteResponseDTO> updateCliente(@RequestBody ClienteRequestDTO clienteRequestDTO) {
+    public ResponseEntity<Void> updateCliente(@RequestBody ClienteRequestDTO clienteRequestDTO) {
         clienteService.atualizaCliente(clienteRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).build();
         //return new ResponseEntity<>(clienteService.atualizaCliente(clienteDTO),HttpStatus.OK);

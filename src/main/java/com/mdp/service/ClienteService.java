@@ -17,19 +17,20 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Transactional
+    public Cliente clienteById(Long id){
+        return clienteRepository.findByClienteId(id);
+    }
 
-    public ClienteResponseDTO clienteById(Long id){
+    @Transactional
+    public ClienteResponseDTO clienteDTOById(Long id){
         return ClienteMapper.clienteMapper(clienteRepository.findByClienteId(id));
     }
 
     @Transactional
     public void cadastraCliente(ClienteRequestDTO clienteRequestDTO){
-//        try {
             Cliente cliente = new Cliente(clienteRequestDTO);
             clienteRepository.save(cliente);
-//        } catch (Exception e) {
-//            throw new IllegalArgumentException("Erro no cadastro do cliente");
-//        }
     }
 
     @Transactional
