@@ -28,15 +28,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    // Handler de erros de violação de chave única (banco)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        Map<String, String> erros = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
         String msg = ex.getMostSpecificCause().getMessage();
-        if (msg.contains("cpf")) erros.put("cpf", "CPF já cadastrado.");
-        if (msg.contains("email")) erros.put("email", "Email já cadastrado.");
-        if (erros.isEmpty()) erros.put("erro", "Erro de integridade de dados.");
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(erros); // 409 Conflict
+
+        if (msg.contains("cpf")) errors.put("cpf", "CPF is already registered.");
+        if (msg.contains("email")) errors.put("email", "Email is already registered.");
+        if (errors.isEmpty()) errors.put("error", "Data integrity violation.");
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errors); // 409 Conflict
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleCustomerNotFound(CustomerNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 }
+
 

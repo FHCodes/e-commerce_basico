@@ -1,7 +1,6 @@
 package com.mdp.repository;
 
-import com.mdp.entity.Cliente;
-import com.mdp.entity.Endereco;
+import com.mdp.entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,14 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface EnderecoRepository extends JpaRepository<Endereco,Long> {
+public interface AddressRepository extends JpaRepository<Address, Long> {
 
-    List<Endereco> findByCliente_ClienteId(Long clienteId);
+    List<Address> findByCustomerId(Long customerId);
 
     @Modifying
     @Transactional
-    @Query("UPDATE ENDERECOS e SET e.endAtual = false WHERE e.cliente.clienteId = :clienteId")
-    void desativarEnderecosDoCliente(@Param("clienteId") Long clienteId);
-
-
+    @Query("UPDATE ADDRESS a SET a.currentAddress = false WHERE a.customer.id = :customerId")
+    void deactivateCustomerAddresses(@Param("customerId") Long customerId);
 }
+
