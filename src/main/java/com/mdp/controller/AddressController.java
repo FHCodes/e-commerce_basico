@@ -19,7 +19,7 @@ public class AddressController {
     private AddressService addressService;
 
     @GetMapping("/{customerId}/all")
-    public ResponseEntity<List<AddressResponseDTO>> getAllAddresses(@PathVariable Long customerId) {
+    public ResponseEntity<List<AddressResponseDTO>> getAllCustomerAddresses(@PathVariable Long customerId) {
         return ResponseEntity.ok(addressService.getAllAddressesByCustomerId(customerId));
     }
 

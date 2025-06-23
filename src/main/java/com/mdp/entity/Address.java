@@ -25,10 +25,6 @@ public class Address {
     }
 
     public Address(AddressRequestDTO addressRequestDTO, Customer customer) {
-        if (addressRequestDTO.id() != null) {
-            this.id = addressRequestDTO.id();
-        }
-
         this.street = addressRequestDTO.street();
         this.city = addressRequestDTO.city();
         this.state = addressRequestDTO.state();
@@ -70,7 +66,33 @@ public class Address {
         return customer;
     }
 
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
     public void setCurrentAddress(Boolean currentAddress) {
         this.currentAddress = currentAddress;
     }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+
 }

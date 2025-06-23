@@ -18,13 +18,13 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public CustomerResponseDTO getCustomerDTOById(Long id) {
         return CustomerMapper.toCustomerDTO(customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(id)));
@@ -37,24 +37,24 @@ public class CustomerService {
     }
 
     @Transactional
-    public void updateCustomer(CustomerRequestDTO customerRequestDTO) {
-        if (customerRequestDTO.id() == null) {
-            throw new IllegalArgumentException("Customer ID cannot be null for update.");
+    public void updateCustomer(CustomerRequestDTO customerDTO) {
+        if (customerDTO.id() == null) {
+            throw new CustomerNotFoundException(customerDTO.id());
         }
 
-        Customer existingCustomer = getCustomerById(customerRequestDTO.id());
+        Customer existingCustomer = getCustomerById(customerDTO.id());
 
-        if (customerRequestDTO.name() != null) {
-            existingCustomer.setName(customerRequestDTO.name());
+        if (customerDTO.name() != null && !customerDTO.name().isBlank()) {
+            existingCustomer.setName(customerDTO.name());
         }
-        if (customerRequestDTO.email() != null) {
-            existingCustomer.setEmail(customerRequestDTO.email());
+        if (customerDTO.email() != null && !customerDTO.email().isBlank()) {
+            existingCustomer.setEmail(customerDTO.email());
         }
-        if (customerRequestDTO.password() != null) {
-            existingCustomer.setPassword(customerRequestDTO.password());
+        if (customerDTO.password() != null && !customerDTO.password().isBlank()) {
+            existingCustomer.setPassword(customerDTO.password());
         }
-        if (customerRequestDTO.cpf() != null) {
-            existingCustomer.setCpf(customerRequestDTO.cpf());
+        if (customerDTO.cpf() != null && !customerDTO.cpf().isBlank()) {
+            existingCustomer.setCpf(customerDTO.cpf());
         }
 
         customerRepository.save(existingCustomer);

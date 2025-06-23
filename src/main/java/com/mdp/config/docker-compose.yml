@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres:15
     container_name: mdp_postgres
-    restart: unless-stopped
+    restart: always
     environment:
       POSTGRES_DB: mdp
       POSTGRES_USER: felipe
@@ -13,6 +13,16 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U felipe"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   pgdata:
