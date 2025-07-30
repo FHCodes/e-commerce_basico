@@ -2,8 +2,8 @@ package com.mdp.service;
 
 import com.mdp.dto.request.CustomerRequestDTO;
 import com.mdp.dto.response.CustomerResponseDTO;
-import com.mdp.entity.Customer;
-import com.mdp.exceptions.CustomerNotFoundException;
+import com.mdp.entity.user.Customer;
+import com.mdp.exceptions.customExceptions.CustomerNotFoundException;
 import com.mdp.mapper.CustomerMapper;
 import com.mdp.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,9 +65,4 @@ public class CustomerService {
         customerRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
-    public List<CustomerResponseDTO> getAllCustomers() {
-        List<Customer> customers = customerRepository.findAll();
-        return CustomerMapper.toCustomerDTOList(customers);
-    }
 }

@@ -1,6 +1,6 @@
 package com.mdp.repository;
 
-import com.mdp.entity.Address;
+import com.mdp.entity.customerAddress.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

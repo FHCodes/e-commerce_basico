@@ -1,4 +1,4 @@
-package com.mdp.exceptions;
+package com.mdp.exceptions.customExceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

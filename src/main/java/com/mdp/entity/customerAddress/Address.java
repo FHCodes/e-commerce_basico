@@ -1,6 +1,7 @@
-package com.mdp.entity;
+package com.mdp.entity.customerAddress;
 
 import com.mdp.dto.request.AddressRequestDTO;
+import com.mdp.entity.user.Customer;
 import jakarta.persistence.*;
 
 @Entity(name = "ADDRESS")

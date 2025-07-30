@@ -1,5 +1,6 @@
 package com.mdp.exceptions;
 
+import com.mdp.exceptions.customExceptions.CustomerNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

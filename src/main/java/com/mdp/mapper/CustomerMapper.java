@@ -1,7 +1,7 @@
 package com.mdp.mapper;
 
 import com.mdp.dto.response.CustomerResponseDTO;
-import com.mdp.entity.Customer;
+import com.mdp.entity.user.Customer;
 import java.util.List;
 
 

@@ -2,8 +2,8 @@ package com.mdp.service;
 
 import com.mdp.dto.request.AddressRequestDTO;
 import com.mdp.dto.response.AddressResponseDTO;
-import com.mdp.entity.Address;
-import com.mdp.exceptions.AddressNotFoundException;
+import com.mdp.entity.customerAddress.Address;
+import com.mdp.exceptions.customExceptions.AddressNotFoundException;
 import com.mdp.mapper.AddressMapper;
 import com.mdp.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +36,27 @@ public class AddressService {
 
     @Transactional
     public void registerAddress(AddressRequestDTO addressRequestDTO) {
-        checkIfAddressIsCurrent(addressRequestDTO);
-        Address address = new Address(addressRequestDTO, customerService.getCustomerById(addressRequestDTO.customerId()));
+        List<Address> existingAddresses = addressRepository.findByCustomerId(addressRequestDTO.customerId());
+
+        boolean shouldBeCurrent = addressRequestDTO.currentAddress();
+
+        // Se for o primeiro endereço, ele obrigatoriamente deve ser o atual
+        if (existingAddresses.isEmpty()) {
+            shouldBeCurrent = true;
+        } else if (shouldBeCurrent) {
+            // Se não é o primeiro, mas foi marcado como atual, desativa os outros
+            addressRepository.deactivateCustomerAddresses(addressRequestDTO.customerId());
+        }
+
+        Address address = new Address(
+                addressRequestDTO,
+                customerService.getCustomerById(addressRequestDTO.customerId())
+        );
+        address.setCurrentAddress(shouldBeCurrent);
+
         addressRepository.save(address);
     }
+
 
     @Transactional
     public Address updateAddress(AddressRequestDTO addressDTO) {

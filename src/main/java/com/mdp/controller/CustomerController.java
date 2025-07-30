@@ -20,7 +20,7 @@ public class CustomerController {
 
     @GetMapping("/test")
     public ResponseEntity<String> test() {
-        return ResponseEntity.ok("It's working, Rafael");
+        return ResponseEntity.ok("It's working");
     }
 
     @GetMapping("/{id}")
@@ -44,10 +44,5 @@ public class CustomerController {
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<CustomerResponseDTO>> getAllCustomers() {
-        return ResponseEntity.ok(customerService.getAllCustomers());
     }
 }
