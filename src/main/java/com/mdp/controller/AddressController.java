@@ -23,15 +23,15 @@ public class AddressController {
         return ResponseEntity.ok(addressService.getAllAddressesByCustomerId(customerId));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Void> registerAddress(@Valid @RequestBody AddressRequestDTO addressRequestDTO) {
-        addressService.registerAddress(addressRequestDTO);
+    @PostMapping("/{customerId}/register")
+    public ResponseEntity<Void> registerAddress(@Valid @RequestBody AddressRequestDTO addressRequestDTO, @PathVariable Long clientId) {
+        addressService.registerAddress(addressRequestDTO,clientId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Void> updateAddress(@RequestBody AddressRequestDTO addressRequestDTO) {
-        addressService.updateAddress(addressRequestDTO);
+    @PutMapping("{clientId}/update")
+    public ResponseEntity<Void> updateAddress(@RequestBody AddressRequestDTO addressRequestDTO, @PathVariable Long clientId) {
+        addressService.updateAddress(addressRequestDTO, clientId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

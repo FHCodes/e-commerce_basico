@@ -3,8 +3,8 @@ package com.mdp.entity.product;
 import com.mdp.dto.request.ProductRequestDTO;
 import com.mdp.entity.user.Seller;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.math.BigDecimal;
 
 @Entity(name = "PRODUCTS")
 @Table(name = "PRODUCTS")
@@ -18,7 +18,7 @@ public class Product {
 
     private String description;
 
-    private Double price;
+    private BigDecimal price;
 
     private Integer stock;
 
@@ -28,11 +28,12 @@ public class Product {
 
     public Product(){}
 
-    public Product(ProductRequestDTO productRequestDTO){
+    public Product(ProductRequestDTO productRequestDTO, Seller seller){
         this.name = productRequestDTO.name();
         this.description = productRequestDTO.description();
         this.price = productRequestDTO.price();
         this.stock = productRequestDTO.stock();
+        this.seller = seller;
     }
 
     // Getters and Setters
@@ -61,11 +62,11 @@ public class Product {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

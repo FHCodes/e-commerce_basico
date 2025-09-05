@@ -3,7 +3,8 @@ package com.mdp.service;
 import com.mdp.dto.request.ProductRequestDTO;
 import com.mdp.dto.response.ProductResponseDTO;
 import com.mdp.entity.product.Product;
-import com.mdp.exceptions.customExceptions.ProductNotFoundException;
+import com.mdp.entity.user.Seller;
+import com.mdp.exceptions.customExceptions.EntityNotFoundException;
 import com.mdp.mapper.ProductMapper;
 import com.mdp.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,31 +19,42 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<ProductResponseDTO> getAllProductsList() {
-        return ProductMapper.toProductDTOList(productRepository.findAll());
+    @Autowired
+    private SellerService sellerService;
+
+    public Product getProduct(Long id){
+        return productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id+ " Product not found"));
+    }
+
+    public List<ProductResponseDTO> getAllProductsList(Long id) {
+        return ProductMapper.toProductDTOList(productRepository.findBySellerId(id));
     }
 
     @Transactional(readOnly = true)
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException(id+ " Product not found"));
     }
 
     @Transactional(readOnly = true)
     public ProductResponseDTO getProductDTOById(Long id) {
         return ProductMapper.toProductDTO(productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id)));
+                .orElseThrow(() -> new EntityNotFoundException(id+ " Product not found")));
     }
 
     @Transactional
-    public ProductResponseDTO registerProduct(ProductRequestDTO productDTO) {
-        return ProductMapper.toProductDTO(productRepository.save(new Product(productDTO)));
+    public ProductResponseDTO registerProduct(ProductRequestDTO productDTO,Long sellerId) {
+
+        //Get seller by id
+        Seller seller = sellerService.getSellerById(sellerId);
+
+        return ProductMapper.toProductDTO(productRepository.save(new Product(productDTO,seller)));
     }
 
     @Transactional
     public ProductResponseDTO updateProduct(ProductRequestDTO productDTO) {
         if (productDTO.id() == null) {
-            throw new ProductNotFoundException(productDTO.id());
+            throw new EntityNotFoundException(productDTO.id() + "Product not found");
         }
 
         Product existingProduct = getProductById(productDTO.id());

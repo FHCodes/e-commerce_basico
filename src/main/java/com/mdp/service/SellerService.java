@@ -4,7 +4,7 @@ package com.mdp.service;
 import com.mdp.dto.request.SellerRequestDTO;
 import com.mdp.dto.response.SellerResponseDTO;
 import com.mdp.entity.user.Seller;
-import com.mdp.exceptions.customExceptions.SellerNotFoundException;
+import com.mdp.exceptions.customExceptions.EntityNotFoundException;
 import com.mdp.mapper.SellerMapper;
 import com.mdp.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +20,14 @@ public class SellerService {
     @Transactional(readOnly = true)
     public Seller getSellerById(Long id) {
         return sellerRepository.findById(id)
-                .orElseThrow(() -> new SellerNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException(id + " Seller not found"));
     }
 
     @Transactional(readOnly = true)
     public SellerResponseDTO getSellerDTOById(Long id) {
         return SellerMapper.toSellerDTO(
                 sellerRepository.findById(id)
-                        .orElseThrow(() -> new SellerNotFoundException(id))
+                        .orElseThrow(() -> new EntityNotFoundException(id + " Seller not found"))
         );
     }
 
@@ -40,7 +40,7 @@ public class SellerService {
     @Transactional
     public void updateSeller(SellerRequestDTO sellerDTO) {
         if (sellerDTO.id() == null) {
-            throw new SellerNotFoundException(null);
+            throw new EntityNotFoundException(sellerDTO.id() + " Seller not found");
         }
 
         Seller existingSeller = getSellerById(sellerDTO.id());

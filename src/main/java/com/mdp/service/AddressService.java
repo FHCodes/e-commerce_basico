@@ -3,7 +3,7 @@ package com.mdp.service;
 import com.mdp.dto.request.AddressRequestDTO;
 import com.mdp.dto.response.AddressResponseDTO;
 import com.mdp.entity.customerAddress.Address;
-import com.mdp.exceptions.customExceptions.AddressNotFoundException;
+import com.mdp.exceptions.customExceptions.EntityNotFoundException;
 import com.mdp.mapper.AddressMapper;
 import com.mdp.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ public class AddressService {
     private AddressRepository addressRepository;
 
     @Transactional
-    public void checkIfAddressIsCurrent(AddressRequestDTO addressRequestDTO) {
+    public void checkIfAddressIsCurrent(AddressRequestDTO addressRequestDTO,Long clientId) {
         if (addressRequestDTO.currentAddress()) {
-            addressRepository.deactivateCustomerAddresses(addressRequestDTO.customerId());
+            addressRepository.deactivateCustomerAddresses(clientId);
         }
     }
 
@@ -35,8 +35,8 @@ public class AddressService {
     }
 
     @Transactional
-    public void registerAddress(AddressRequestDTO addressRequestDTO) {
-        List<Address> existingAddresses = addressRepository.findByCustomerId(addressRequestDTO.customerId());
+    public void registerAddress(AddressRequestDTO addressRequestDTO, Long clientId) {
+        List<Address> existingAddresses = addressRepository.findByCustomerId(clientId);
 
         boolean shouldBeCurrent = addressRequestDTO.currentAddress();
 
@@ -45,12 +45,12 @@ public class AddressService {
             shouldBeCurrent = true;
         } else if (shouldBeCurrent) {
             // Se não é o primeiro, mas foi marcado como atual, desativa os outros
-            addressRepository.deactivateCustomerAddresses(addressRequestDTO.customerId());
+            addressRepository.deactivateCustomerAddresses(clientId);
         }
 
         Address address = new Address(
                 addressRequestDTO,
-                customerService.getCustomerById(addressRequestDTO.customerId())
+                customerService.getCustomerById(clientId)
         );
         address.setCurrentAddress(shouldBeCurrent);
 
@@ -59,16 +59,16 @@ public class AddressService {
 
 
     @Transactional
-    public Address updateAddress(AddressRequestDTO addressDTO) {
+    public Address updateAddress(AddressRequestDTO addressDTO, Long clientId) {
 
         if (addressDTO.id() == null) {
-            throw new AddressNotFoundException(addressDTO.id());
+            throw new EntityNotFoundException(addressDTO.id() + " Address not found");
         }
 
-        checkIfAddressIsCurrent(addressDTO);
+        checkIfAddressIsCurrent(addressDTO, clientId);
 
         Address existingAddress = addressRepository.findById(addressDTO.id())
-                .orElseThrow(() -> new AddressNotFoundException(addressDTO.id()));
+                .orElseThrow(() -> new EntityNotFoundException(addressDTO.id() + " Address not found"));
 
         if (addressDTO.street() != null && !addressDTO.street().isBlank()) {
             existingAddress.setStreet(addressDTO.street());

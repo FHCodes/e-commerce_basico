@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +18,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ProductResponseDTO>> getAllProducts (){
-        return ResponseEntity.ok(productService.getAllProductsList());
+    @GetMapping("/{sellerId}/all")
+    public ResponseEntity<List<ProductResponseDTO>> getAllProductsBySeller (@PathVariable long sellerId){
+        return ResponseEntity.ok(productService.getAllProductsList(sellerId));
     }
 
     @GetMapping("/{id}")
@@ -29,9 +28,9 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductDTOById(id));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<ProductResponseDTO> registerProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
-        ProductResponseDTO createdProduct = productService.registerProduct(productRequestDTO);
+    @PostMapping("/{sellerId}/register")
+    public ResponseEntity<ProductResponseDTO> registerProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO, @PathVariable Long sellerId) {
+        ProductResponseDTO createdProduct = productService.registerProduct(productRequestDTO,sellerId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

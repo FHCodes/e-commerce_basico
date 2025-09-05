@@ -24,9 +24,5 @@ public record AddressRequestDTO(
         Integer number,
 
         @NotNull(message = "You must specify if this is the current address")
-        Boolean currentAddress,
-
-        @NotNull(message = "Customer ID is required")
-        Long customerId
-
+        Boolean currentAddress
 ) {}

@@ -3,14 +3,12 @@ package com.mdp.service;
 import com.mdp.dto.request.CustomerRequestDTO;
 import com.mdp.dto.response.CustomerResponseDTO;
 import com.mdp.entity.user.Customer;
-import com.mdp.exceptions.customExceptions.CustomerNotFoundException;
+import com.mdp.exceptions.customExceptions.EntityNotFoundException;
 import com.mdp.mapper.CustomerMapper;
 import com.mdp.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class CustomerService {
@@ -21,13 +19,13 @@ public class CustomerService {
     @Transactional(readOnly = true)
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException(id + " Custumer not found"));
     }
 
     @Transactional(readOnly = true)
     public CustomerResponseDTO getCustomerDTOById(Long id) {
         return CustomerMapper.toCustomerDTO(customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id)));
+                .orElseThrow(() -> new EntityNotFoundException(id + " Custumer not found")));
     }
 
     @Transactional
@@ -39,7 +37,7 @@ public class CustomerService {
     @Transactional
     public void updateCustomer(CustomerRequestDTO customerDTO) {
         if (customerDTO.id() == null) {
-            throw new CustomerNotFoundException(customerDTO.id());
+            throw new EntityNotFoundException(customerDTO.id() + " Custumer not found");
         }
 
         Customer existingCustomer = getCustomerById(customerDTO.id());
